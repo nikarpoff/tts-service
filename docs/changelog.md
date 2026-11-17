@@ -16,3 +16,9 @@
 - Бэкенд `fake` синтезирует тон 60 мс на символ с задержкой `FAKE_LATENCY_MS` на предложение, голоса `fake_f` и `fake_m`.
 - Добавлены `scripts/render_phrases.py` (WAV системных фраз приложения, TTS-8) и `bench/latency.py` (время до первого фрагмента и RTF в JSON EXP-2).
 - Добавлены зависимости `scipy` и `pyyaml`.
+- Добавлены бэкенды `silero` (Silero TTS `v5_ru` и другие русские модели, голоса `xenia`, `kseniya`, `baya`, `aidar`, `eugene`, автоударение, скорость через SSML), `piper` (голоса `ru_RU-denis-medium`, `ru_RU-dmitri-medium`, `ru_RU-irina-medium`, `ru_RU-ruslan-medium`, фонемы и ударения espeak-ng, `+` - знак ударения) и `f5tts` (F5-TTS_RUSSIAN с вокодером Vocos, голоса из эталонных записей `voices.yaml`, для видеокарты) - каждый своим extra с ленивым импортом. Предложение, которое модель не может прочитать, становится паузой 100 мс.
+- Веса моделей скачиваются при первом старте в `ARTIFACTS_PATH/<бэкенд>/` или в `~/.cache/tts-service/<бэкенд>/` и больше не качаются; `scripts/fetch_weights.py` скачивает веса текущей модели заранее, не загружая её (DEP-6).
+- Образы ставят бэкенды по умолчанию: `Dockerfile.cpu` - `cpu silero piper`, `Dockerfile` - `gpu silero piper f5tts`. torchaudio (зависимость F5-TTS) берётся из индекса PyTorch своего профиля.
+- Добавлен модельный тест `tests/test_model_smoke.py` (маркер `model`): Piper, а при extra `silero` и Silero, синтезирует речь от 40 до 150 мс на символ с нормализованным пиком, ускоряется от `speed` и читает ударение `+`; `piper-tts` для него - в группе `dev`.
+- В README - таблицы бэкендов, весов и лицензий моделей и библиотек; системные фразы приложения перезаписаны голосом Piper `ru_RU-denis-medium` (MIT, данные CC0), так как веса Silero и F5-TTS_RUSSIAN некоммерческие.
+- Зависимость `huggingface-hub` понижена до `>=1.0.0`: её требует `f5-tts` через `cached-path`.
