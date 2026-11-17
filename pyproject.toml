@@ -31,13 +31,14 @@ dependencies = [
 # ---------------------------------------------------------------------------
 [project.optional-dependencies]
 
-# CPU wheels, so no CUDA payload.
+# CPU wheels, so no CUDA payload. torchaudio is a dependency of f5-tts and has to
+# come from the same index as torch: the PyPI wheel is a CUDA build.
 cpu = [
   "torch>=2.14.0,<2.15.0",
+  "torchaudio>=2.9.0",
 ]
 
-# CUDA wheels for the GPU image. torchaudio is a dependency of f5-tts and has to
-# come from the same index as torch.
+# CUDA wheels for the GPU image.
 gpu = [
   "torch>=2.14.0,<2.15.0",
   "torchaudio>=2.9.0",
@@ -90,6 +91,7 @@ torch = [
   { index = "pytorch-cu130", extra = "gpu", marker = "sys_platform != 'darwin'" },
 ]
 torchaudio = [
+  { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
   { index = "pytorch-cu130", extra = "gpu", marker = "sys_platform != 'darwin'" },
 ]
 

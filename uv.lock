@@ -574,7 +574,8 @@ dependencies = [
     { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torch", version = "2.14.1+cu130", source = { registry = "https://download.pytorch.org/whl/cu130" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-gpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torchaudio", version = "2.11.0+cu130", source = { registry = "https://download.pytorch.org/whl/cu130" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-gpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
-    { name = "torchaudio", version = "2.11.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or extra == 'extra-11-tts-service-cpu' or extra != 'extra-11-tts-service-gpu'" },
+    { name = "torchaudio", version = "2.11.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu') or (extra != 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu')" },
+    { name = "torchaudio", version = "2.11.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/62/59/e47bbd0542d0e6f4ce9983d5eb458a01d4b42c81e5c410cb9e159b1061ae/encodec-0.1.1.tar.gz", hash = "sha256:36dde98ccfe6c51a15576476cadfcb3b35a63507b8b8555abd69889a6fba6772", size = 3736037, upload-time = "2022-10-25T16:13:21.471Z" }
 
@@ -603,7 +604,8 @@ dependencies = [
     { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torch", version = "2.14.1+cu130", source = { registry = "https://download.pytorch.org/whl/cu130" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-gpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torchaudio", version = "2.11.0+cu130", source = { registry = "https://download.pytorch.org/whl/cu130" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-gpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
-    { name = "torchaudio", version = "2.11.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or extra == 'extra-11-tts-service-cpu' or extra != 'extra-11-tts-service-gpu'" },
+    { name = "torchaudio", version = "2.11.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu') or (extra != 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu')" },
+    { name = "torchaudio", version = "2.11.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torchcodec" },
     { name = "torchdiffeq" },
     { name = "tqdm" },
@@ -2618,9 +2620,6 @@ version = "2.11.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "sys_platform == 'darwin' and extra != 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu'",
-    "sys_platform == 'win32' and extra == 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu'",
-    "sys_platform == 'emscripten' and extra == 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu'",
-    "sys_platform != 'darwin' and sys_platform != 'emscripten' and sys_platform != 'win32' and extra == 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu'",
     "sys_platform == 'darwin' and extra == 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu'",
     "sys_platform == 'win32' and extra != 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu'",
     "sys_platform == 'emscripten' and extra != 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu'",
@@ -2628,13 +2627,30 @@ resolution-markers = [
 ]
 dependencies = [
     { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu') or (extra != 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu')" },
-    { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/95/2a/c2b0f44906f8a4e8d90facdf68bc76bb14e72a0cbb9cc0457ca1c2fcd101/torchaudio-2.11.1-py3-none-macosx_14_0_arm64.whl", hash = "sha256:917667ab3e357d286b0e2405a33dc538e4344d554b72e1b2b03382a4352ca857", size = 699189, upload-time = "2026-10-28T15:21:42.129Z" },
     { url = "https://files.pythonhosted.org/packages/90/c7/e352c0a0f34653f3f6a581b580352ab1c83e5d04019826ade4dfc26cf664/torchaudio-2.11.1-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:ad1175202b5cdb7585a38c1330845430e128c4ed8ceb770639318aa40fc1994b", size = 1678033, upload-time = "2026-10-28T15:21:43.28Z" },
     { url = "https://files.pythonhosted.org/packages/e6/ad/b0bf9bfa9db80acf0ce660e01a67b3b735343ab51ce1410b18d2aaed254c/torchaudio-2.11.1-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:0173b5b51e1368aa88de3cbe4e98508b5e9df4d8d59356c4e1fbc830c96191ef", size = 1816417, upload-time = "2026-10-28T15:21:45.007Z" },
     { url = "https://files.pythonhosted.org/packages/6b/9e/549c9bb2d139fe78c90c9381f9ffbfc87232336df4537a65ea31d51fcdee/torchaudio-2.11.1-py3-none-win_amd64.whl", hash = "sha256:46ea71634d181f797370f046075ea982043c228b38d674fd7d9fc1c855a37b6a", size = 334360, upload-time = "2026-10-28T15:21:40.715Z" },
+]
+
+[[package]]
+name = "torchaudio"
+version = "2.11.1+cpu"
+source = { registry = "https://download.pytorch.org/whl/cpu" }
+resolution-markers = [
+    "sys_platform == 'win32'",
+    "sys_platform == 'emscripten'",
+    "sys_platform != 'darwin' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+]
+dependencies = [
+    { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
+]
+wheels = [
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.11.1%2Bcpu-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:684d418d5aa2c98a8dff9a4e8911825da1109cda9b9e757eaf58ff9428c4577b", upload-time = "2026-10-28T14:19:39Z" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.11.1%2Bcpu-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:fc050a1aeb556f8a7f5ee01531e6ae9f130aed81452da6d9052d3429e3a68d9e", upload-time = "2026-10-28T14:19:39Z" },
+    { url = "https://download-r2.pytorch.org/whl/cpu/torchaudio-2.11.1%2Bcpu-py3-none-win_amd64.whl", hash = "sha256:225163573057c05095824dcb7955b4bf605cae688add842951cba20d54cc4470", upload-time = "2026-10-28T14:19:39Z" },
 ]
 
 [[package]]
@@ -2743,6 +2759,8 @@ dependencies = [
 cpu = [
     { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
+    { name = "torchaudio", version = "2.11.1", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
+    { name = "torchaudio", version = "2.11.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
 ]
 f5tts = [
     { name = "f5-tts" },
@@ -2786,7 +2804,9 @@ requires-dist = [
     { name = "torch", marker = "sys_platform != 'darwin' and extra == 'cpu'", specifier = ">=2.14.0,<2.15.0", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "tts-service", extra = "cpu" } },
     { name = "torch", marker = "sys_platform != 'darwin' and extra == 'gpu'", specifier = ">=2.14.0,<2.15.0", index = "https://download.pytorch.org/whl/cu130", conflict = { package = "tts-service", extra = "gpu" } },
     { name = "torch", marker = "extra == 'silero'", specifier = ">=2.14.0,<2.15.0" },
+    { name = "torchaudio", marker = "sys_platform == 'darwin' and extra == 'cpu'", specifier = ">=2.9.0" },
     { name = "torchaudio", marker = "sys_platform == 'darwin' and extra == 'gpu'", specifier = ">=2.9.0" },
+    { name = "torchaudio", marker = "sys_platform != 'darwin' and extra == 'cpu'", specifier = ">=2.9.0", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "tts-service", extra = "cpu" } },
     { name = "torchaudio", marker = "sys_platform != 'darwin' and extra == 'gpu'", specifier = ">=2.9.0", index = "https://download.pytorch.org/whl/cu130", conflict = { package = "tts-service", extra = "gpu" } },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
 ]
@@ -2913,7 +2933,8 @@ dependencies = [
     { name = "torch", version = "2.14.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torch", version = "2.14.1+cu130", source = { registry = "https://download.pytorch.org/whl/cu130" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-gpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
     { name = "torchaudio", version = "2.11.0+cu130", source = { registry = "https://download.pytorch.org/whl/cu130" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-gpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
-    { name = "torchaudio", version = "2.11.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or extra == 'extra-11-tts-service-cpu' or extra != 'extra-11-tts-service-gpu'" },
+    { name = "torchaudio", version = "2.11.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'darwin' or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu') or (extra != 'extra-11-tts-service-cpu' and extra != 'extra-11-tts-service-gpu')" },
+    { name = "torchaudio", version = "2.11.1+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform != 'darwin' and extra == 'extra-11-tts-service-cpu') or (extra == 'extra-11-tts-service-cpu' and extra == 'extra-11-tts-service-gpu')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/db/48/1e4d3a4a97292e47ebaa18e3eae6ecb2f57bde47693ccab0e7acb23f9ffe/vocos-0.1.0.tar.gz", hash = "sha256:b488224dbe398ff7d4790a027ad659478b4bc02e465db992c62c12b32ca043d8", size = 21107, upload-time = "2023-10-14T00:57:29.631Z" }
 wheels = [
