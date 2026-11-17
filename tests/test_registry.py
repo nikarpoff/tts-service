@@ -3,6 +3,10 @@ Backend registry: MODEL_BACKEND picks the backend, a wrong one stops the start w
 """
 
 import re
+import subprocess
+import sys
+
+from pathlib import Path
 
 import pytest
 
@@ -11,8 +15,12 @@ from loguru import logger
 from app.core.backends import registry
 from app.core.backends.fake import FakeBackend
 from app.core.backends.registry import BACKENDS, BackendSpec, build_backend
+from app.core.backends.weights import fetch, weights_dir
 from app.core.config import Settings
 from app.core.exceptions import BackendError
+from scripts.fetch_weights import main as fetch_weights_main
+
+ROOT = Path(__file__).resolve().parents[1]
 
 EXTRA_BACKENDS = sorted(name for name, spec in BACKENDS.items() if spec.extra)
 
@@ -64,3 +72,67 @@ def test_registry_missing_library_on_import_fails(tmp_path, monkeypatch):
 
     with pytest.raises(BackendError, match=re.escape("Backend 'probe' requires the 'probe' extra")):
         build_backend(make_settings(MODEL_BACKEND="probe"))
+
+
+@pytest.mark.parametrize("name", EXTRA_BACKENDS)
+def test_registry_real_backend_declares_models(name):
+    # The registry entry points at the module of the backend, its extra and the packages checked before the import
+    spec = BACKENDS[name]
+    module_name, _ = spec.path.split(":")
+    assert module_name == f"app.core.backends.{name}"
+    assert spec.extra == name and spec.packages
+
+
+def test_registry_imports_no_model_library():
+    # The fast environment builds fake without torch or piper: nothing of the real backends is imported
+    code = (
+        "import sys; from app.core.backends import build_backend; from app.core.config import Settings;"
+        "build_backend(Settings(_env_file=None, MODEL_BACKEND='fake'));"
+        "print(sorted(m for m in ('torch', 'piper', 'f5_tts', 'onnxruntime') if m in sys.modules))"
+    )
+    result = subprocess.run([sys.executable, "-c", code], cwd=ROOT, capture_output=True, text=True, check=True)
+    assert result.stdout.strip() == "[]"
+
+
+def test_weights_dir_under_artifacts_path(tmp_path, monkeypatch):
+    assert weights_dir(make_settings(ARTIFACTS_PATH=tmp_path), "piper") == tmp_path / "piper"
+
+    monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "cache"))
+    assert weights_dir(make_settings(ARTIFACTS_PATH=None), "silero") == tmp_path / "cache" / "tts-service" / "silero"
+
+
+def test_weights_fetched_once(tmp_path):
+    source = tmp_path / "source.bin"
+    source.write_bytes(b"weights")
+    target = tmp_path / "weights" / "model.bin"
+
+    assert fetch(source.as_uri(), target) == target
+    assert target.read_bytes() == b"weights"
+
+    # The file in place is not downloaded again: a start needs no network
+    source.unlink()
+    assert fetch(source.as_uri(), target) == target
+
+
+def test_weights_unreachable_fail(tmp_path):
+    target = tmp_path / "model.bin"
+    with pytest.raises(BackendError, match="cannot be downloaded"):
+        fetch((tmp_path / "missing.bin").as_uri(), target)
+    # No partial file passes for the weights
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_fetch_weights_script(capsys):
+    assert fetch_weights_main(["--backend", "fake"]) == 0
+    assert capsys.readouterr().out == "fake/fake\tвесов нет\n"
+
+    assert fetch_weights_main(["--backend", "yolo9000"]) == 1
+    assert "неизвестный бэкенд 'yolo9000'" in capsys.readouterr().err
+    assert fetch_weights_main(["--backend", "piper", "--model", "ru_RU-nobody-low"]) == 1
+    assert "неизвестная модель 'ru_RU-nobody-low'" in capsys.readouterr().err
+
+
+def test_fetch_weights_script_missing_extra(monkeypatch, capsys):
+    monkeypatch.setattr(registry, "find_spec", lambda package: None)
+    assert fetch_weights_main(["--backend", "silero"]) == 1
+    assert "Backend 'silero' requires the 'silero' extra" in capsys.readouterr().err
