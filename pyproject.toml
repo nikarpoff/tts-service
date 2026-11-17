@@ -17,7 +17,7 @@ dependencies = [
 
   # --- Models -----------------------------------------------------
   "numpy>=2.5.0",
-  "huggingface-hub>=2.4.0",
+  "huggingface-hub>=1.0.0",
 
   # --- Audio and phrases ------------------------------------------
   "scipy>=1.18.1,<2.0.0",
@@ -31,19 +31,42 @@ dependencies = [
 # ---------------------------------------------------------------------------
 [project.optional-dependencies]
 
-# CPU wheels, so no CUDA payload.
+# CPU wheels, so no CUDA payload. torchaudio is a dependency of f5-tts and has to
+# come from the same index as torch: the PyPI wheel is a CUDA build.
 cpu = [
   "torch>=2.14.0,<2.15.0",
+  "torchaudio>=2.9.0",
 ]
 
 # CUDA wheels for the GPU image.
 gpu = [
   "torch>=2.14.0,<2.15.0",
+  "torchaudio>=2.9.0",
+]
+
+# Silero TTS: a model is a torch.package file and runs on torch alone, so the
+# extra only marks the backend as wanted. The Russian models are CC BY-NC-SA 4.0.
+silero = [
+  "torch>=2.14.0,<2.15.0",
+]
+
+# Piper: the library is GPL-3.0; the voices carry licenses of their own.
+piper = [
+  "piper-tts>=1.8.0,<2.0.0",
+]
+
+# F5-TTS: the code is MIT, the Russian weights are CC BY-NC 4.0. Needs a GPU.
+f5tts = [
+  "f5-tts>=1.1.22,<2.0.0",
 ]
 
 [dependency-groups]
 dev = [
   "pytest>=9.2.0",
+  # The model smoke test (AC-84) runs the piper backend: onnxruntime and no torch,
+  # so the test environment stays light. A test tool only: the images install no
+  # dev group, the GPL library reaches them through the piper extra alone
+  "piper-tts>=1.8.0,<2.0.0",
 ]
 
 # ---------------------------------------------------------------------------
@@ -64,6 +87,10 @@ explicit = true
 
 [tool.uv.sources]
 torch = [
+  { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
+  { index = "pytorch-cu130", extra = "gpu", marker = "sys_platform != 'darwin'" },
+]
+torchaudio = [
   { index = "pytorch-cpu", extra = "cpu", marker = "sys_platform != 'darwin'" },
   { index = "pytorch-cu130", extra = "gpu", marker = "sys_platform != 'darwin'" },
 ]

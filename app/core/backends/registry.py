@@ -27,7 +27,7 @@ class BackendSpec:
 # Backends of the service (TTS-3); the key is the MODEL_BACKEND value
 BACKENDS: Dict[str, BackendSpec] = {
     "fake": BackendSpec("app.core.backends.fake:FakeBackend"),
-    "silero": BackendSpec("app.core.backends.silero:SileroBackend", "silero", ("silero", )),
+    "silero": BackendSpec("app.core.backends.silero:SileroBackend", "silero", ("torch", )),
     "piper": BackendSpec("app.core.backends.piper:PiperBackend", "piper", ("piper", )),
     "f5tts": BackendSpec("app.core.backends.f5tts:F5TTSBackend", "f5tts", ("f5_tts", )),
 }
