@@ -9,9 +9,9 @@ ENV UV_PYTHON_DOWNLOADS=never
 # Go to app directory
 WORKDIR /app
 
-# Extras to install: the gpu profile and the backends. EXTRAS="" leaves the
-# fake backend only
-ARG EXTRAS="gpu"
+# Extras to install: the gpu profile and all the backends. EXTRAS="" leaves the
+# fake backend only. The weights are not in the image: ARTIFACTS_PATH points at a volume
+ARG EXTRAS="gpu silero piper f5tts"
 
 # Install uv dependencies. One lock serves both profiles: the conflicting cpu and
 # gpu extras are resolved side by side in it, and --extra picks which one lands.
